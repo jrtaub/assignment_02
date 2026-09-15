@@ -47,7 +47,13 @@ def clean_currency(value) -> float:
       from the `except`. That is the line that stops one `"N/A"` from killing a
       report of 400 good rows.
     """
-    # TODO: your code here
+    if value is None:
+        return 0.0
+    cleaned_value = str(value).replace("$", "").replace(",", "").strip()
+    try:
+        return float(cleaned_value)
+    except ValueError:
+        return 0.0
     pass
 
 
@@ -73,8 +79,12 @@ def clean_quantity(value) -> int:
     - Do not try to translate `"one"` into `1`. A word in a number field is bad
       data, and bad data becomes `0`.
     """
-    # TODO: your code here
-    pass
+    if value is None:
+            return 0
+    try:
+        return int(str(value).strip())
+    except ValueError:
+        return 0
 
 
 def clean_sales_data(raw_data: list[dict]) -> list[dict]:
@@ -104,7 +114,20 @@ def clean_sales_data(raw_data: list[dict]) -> list[dict]:
       cleaned `price` and `qty` you just stored instead of cleaning the raw values
       a second time.
     """
-    # TODO: your code here
+    cleaned_rows = []
+    for row in raw_data:
+      price = clean_currency(row["price"])
+      qty = clean_quantity(row["qty"])
+      new_row = {
+          "date": row["date"],
+          "item": row["item"],
+          "price": price,
+          "qty": qty,
+          "total_revenue": 0}
+
+      new_row ["total_revenue"] = price * qty
+      cleaned_rows.append(new_row)
+    return cleaned_rows
     pass
 
 
@@ -128,7 +151,10 @@ def calculate_total_revenue(cleaned_data: list[dict]) -> float:
     - Nothing needs cleaning here. These rows already went through
       `clean_sales_data`, so `row["total_revenue"]` is a number you can trust.
     """
-    # TODO: your code here
+    total = 0.0
+    for row in cleaned_data:
+        total += row["total_revenue"]
+    return total
     pass
 
 
@@ -163,7 +189,18 @@ def summarize_by_item(cleaned_data: list[dict]) -> list[dict]:
       `key=lambda entry: (-entry["revenue"], entry["item"])`. The tuple reads as
       "sort by revenue, biggest first, and use the name to break ties."
     """
-    # TODO: your code here
+    totals = {}
+    for row in cleaned_rows:
+        item = row["item"]
+        if item not in totals:
+            totals[item] = {"item": item, "units_sold": 0, "revenue": 0.0}
+        totals[item]["units_sold"] += row["qty"]
+        totals[item]["revenue"] += row["total_revenue"]
+        grouped_list = list(totals.values())
+        group_list_sorted = sorted(
+            grouped_list, 
+            key=lambda entry: (-entry["revenue"], entry["item"]))
+        return group_list_sorted
     pass
 
 
@@ -197,7 +234,16 @@ def summarize_by_day(cleaned_data: list[dict]) -> list[dict]:
       twice under two spellings. Do still guard the "first time I have seen this
       date" case, or the first row of each day has nothing to add itself to.
     """
-    # TODO: your code here
+    total = {}
+    for row in cleaned_rows:
+        date = row["date"]
+        if date not in total:
+            total[date] = {"date": date, "units_sold": 0, "revenue": 0.0}
+        total[date]["units_sold"] += row["qty"]
+        total[date]["revenue"] += row["total_revenue"]
+    grouped_list = list(total.values())
+    grouped_list_sorted = sorted(grouped_list, key=lambda entry: entry["date"])
+    return grouped_list_sorted
     pass
 
 
@@ -231,5 +277,11 @@ def find_top_entry(summary: list[dict], field: str = "revenue") -> dict:
       by revenue. It is only sorted by *revenue*, so that answer is wrong the moment
       someone asks for `units_sold`.
     """
-    # TODO: your code here
+    if not summary:
+        return {}
+    top_entry = summary[0]
+    for entry in summary:
+        if entry[field] > top_entry[field]:
+            top_entry = entry
+    return top_entry
     pass
