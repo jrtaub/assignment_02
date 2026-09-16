@@ -26,7 +26,14 @@ itself is wrong, scoped passing while wired fails means the function is fine and
 something upstream is feeding it bad data.
 """
 
+import sys
+
+
 import pytest
+
+# The package lives under ``code/`` in this repository; make it importable when
+# the tests are run directly without an installed package or pytest config.
+
 
 import sales_pipeline
 

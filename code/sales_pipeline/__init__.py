@@ -68,9 +68,10 @@ HOW TO BUILD IT
 # imports — "from the display module that sits beside this file", not "from some
 # package called display installed on this machine".
 
-from .extract import get_raw_sales_data
-from .transform import clean_sales_data
-from .display import print_sales_table
+from .extract import get_raw_sales_data 
+from .transform import clean_sales_data, calculate_total_revenue, find_top_entry, summarize_by_day, summarize_by_item, clean_currency, clean_quantity
+from .display import print_sales_table, print_item_table, print_day_table
+
 
 
 # `__all__` is a list of strings naming the public API. It does two jobs.
@@ -88,7 +89,13 @@ from .display import print_sales_table
 __all__ = [
     "get_raw_sales_data",
     "clean_sales_data",
+    "calculate_total_revenue",
+    "summarize_by_item",
+    "summarize_by_day",
+    "find_top_entry",
     "print_sales_table",
+    "print_item_table",
+    "print_day_table",
 ]
 
 
