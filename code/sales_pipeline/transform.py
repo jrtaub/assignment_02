@@ -284,4 +284,3 @@ def find_top_entry(summary: list[dict], field: str = "revenue") -> dict:
         if entry[field] > top_entry[field]:
             top_entry = entry
     return top_entry
-    pass
