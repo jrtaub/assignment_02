@@ -1,6 +1,1 @@
-Write your reflection here.
-
-See reflection.md for what makes a good reflection — be specific, use the
-terminology from this assignment (package, module, ETL, coercion, public API,
-relative import, accumulator, group by, unit vs. integration test), and make it
-actionable.
+I had a hard time with this assignment. The hardest part for me was keeping track of how the data changed through the ETL pipeline, especially when the cleaned sales data was grouped using functions like summarize_by_item and summarize_by_day. I also had a hard time figuring out what all needed to be imported into the _init_.py page via the extract, transform and display imports. This really threw me for a loop when I was trying to run the tests and they kept failing. Once I figured it out I could see how specific and detailed I need to be in adding a lot of information to make sure that the pipeline was able to work together as a whole to past the tests and for the python package. 
